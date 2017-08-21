@@ -1,6 +1,3 @@
-require "tesseract/version"
-require "tesseract/tesseract"
-
 module Tesseract
-  # Your code goes here...
+  Executable = File.expand_path('../../bin/tesseract', __FILE__)
 end
