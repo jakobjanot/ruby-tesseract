@@ -3,7 +3,25 @@ require 'pathname'
 
 find_executable('make')
 
-root = File.expand_path('../../..', __FILE__)
+root = Pathname.new(__dir__).join('../..')
+
+leptonica_dir = Pathname.new(root).join('vendor/leptonica')
+
+Dir.chdir(leptonica_dir) do
+  system "./configure --prefix=#{root.join("lib")}"
+  system "make && make install && make clean"
+end
+
+Dir.chdir(root.join('vendor/tesseract')) do
+  system "./autogen.sh"
+  system \
+    "LEPTONICA_LIBS=#{root.join("lib")} "
+    "LIBLEPT_HEADERSDIR=#{leptonica_dir.join("include")} "\
+    "./configure --prefix=#{root} "\
+    "--disable-graphics "\
+    "--disable-dependency-tracking"
+  system "make && make install && make clean"
+end
 
 # Create a dummy extension file. Without this RubyGems would abort the
 # installation process. On Linux this would result in the file "tesseract.so"
@@ -14,12 +32,6 @@ root = File.expand_path('../../..', __FILE__)
 #
 dummy_extension = File.join(File.dirname(__FILE__), "tesseract.#{RbConfig::CONFIG['DLEXT']}")
 File.open(dummy_extension, "w") {}
-
-Dir.chdir(File.join(root, 'vendor/tesseract')) do
-  system "./autogen.sh"
-  system "./configure --prefix=#{root} --disable-graphics --disable-dependency-tracking"
-  system "make && make install && make clean"
-end
 
 # This is normally set by calling create_makefile() but we don't need that
 # method since we'll provide a dummy Makefile. Without setting this value

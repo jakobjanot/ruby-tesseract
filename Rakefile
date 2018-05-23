@@ -5,10 +5,10 @@ RSpec::Core::RakeTask.new(:spec)
 
 require "rake/extensiontask"
 
-task :build => :compile
+task build: :compile
 
 Rake::ExtensionTask.new("tesseract") do |ext|
   ext.lib_dir = "lib/tesseract"
 end
 
-task :default => [:clobber, :compile, :spec]
+task default: %i[clobber compile spec]
