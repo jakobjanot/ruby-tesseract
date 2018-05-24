@@ -3,12 +3,13 @@ require 'pathname'
 
 find_executable('make')
 
-root = Pathname.new(__dir__).join('../..')
+root = Pathname.new(__dir__).join('../..').expand_path
 
 leptonica_dir = Pathname.new(root).join('vendor/leptonica')
 
 Dir.chdir(leptonica_dir) do
-  system "./configure --prefix=#{root.join("lib")}"
+  system "./autobuild"
+  system "./configure --prefix=#{root}"
   system "make && make install && make clean"
 end
 
