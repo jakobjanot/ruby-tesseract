@@ -1,6 +1,0 @@
-[submodule "vendor/tesseract"]
-	path = vendor/tesseract
-	url = https://github.com/tesseract-ocr/tesseract.git
-[submodule "leptonica"]
-	path = vendor/leptonica
-	url = https://github.com/DanBloomberg/leptonica
